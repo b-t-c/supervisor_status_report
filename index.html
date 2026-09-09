@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Status Report" />
+  <title>Supervisor Status Report</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="input-screen" class="screen active" aria-labelledby="app-title">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Facilities</p>
+          <h1 id="app-title">Status Report</h1>
+        </div>
+        <button id="clear-btn" class="btn btn-ghost" type="button">Clear</button>
+      </header>
+
+      <div id="validation-summary" class="validation-summary" role="alert" hidden></div>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Process status</p>
+            <h2>3P</h2>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Current operational mode</span>
+          <select id="p3-mode" data-save>
+            <option value="offline">Offline</option>
+            <option value="standby">In standby</option>
+            <option value="serial">In serial</option>
+          </select>
+        </label>
+
+        <div id="p3-samples" class="sample-grid" hidden>
+          <div class="sample-block">
+            <h3>A-side water</h3>
+            <div class="paired-fields">
+              <label class="field">
+                <span>Result (ppm)</span>
+                <input id="p3-a-result" data-save type="number" inputmode="numeric" min="0" step="1" placeholder="56" />
+              </label>
+              <label class="field">
+                <span>Sample time</span>
+                <input id="p3-a-time" data-save type="time" />
+              </label>
+            </div>
+          </div>
+
+          <div class="sample-block">
+            <h3>B-side water</h3>
+            <div class="paired-fields">
+              <label class="field">
+                <span>Result (ppm)</span>
+                <input id="p3-b-result" data-save type="number" inputmode="numeric" min="0" step="1" placeholder="71" />
+              </label>
+              <label class="field">
+                <span>Sample time</span>
+                <input id="p3-b-time" data-save type="time" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Process status</p>
+            <h2>4P</h2>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Current operational mode</span>
+          <select id="p4-mode" data-save>
+            <option value="offline">Offline</option>
+            <option value="standby">In standby</option>
+            <option value="serial">In serial</option>
+          </select>
+        </label>
+
+        <div id="p4-samples" class="sample-grid" hidden>
+          <div class="sample-block">
+            <h3>A-side water</h3>
+            <div class="paired-fields">
+              <label class="field">
+                <span>Result (ppm)</span>
+                <input id="p4-a-result" data-save type="number" inputmode="numeric" min="0" step="1" placeholder="56" />
+              </label>
+              <label class="field">
+                <span>Sample time</span>
+                <input id="p4-a-time" data-save type="time" />
+              </label>
+            </div>
+          </div>
+
+          <div class="sample-block">
+            <h3>B-side water</h3>
+            <div class="paired-fields">
+              <label class="field">
+                <span>Result (ppm)</span>
+                <input id="p4-b-result" data-save type="number" inputmode="numeric" min="0" step="1" placeholder="71" />
+              </label>
+              <label class="field">
+                <span>Sample time</span>
+                <input id="p4-b-time" data-save type="time" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Inventory</p>
+            <h2>Storage tanks</h2>
+          </div>
+          <div class="runtime-pill">
+            <span>Current NMP supply</span>
+            <strong id="runtime-preview">0d 0hr</strong>
+          </div>
+        </div>
+
+        <div class="tank-list">
+          <div class="tank-row">
+            <div class="tank-name">ST5</div>
+            <label class="field compact">
+              <span>Level</span>
+              <div class="suffix-input">
+                <input id="st5-level" data-save type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="0.0" />
+                <span>%</span>
+              </div>
+            </label>
+            <label class="check-field">
+              <input id="st5-active" data-save type="checkbox" />
+              <span>Active</span>
+            </label>
+          </div>
+
+          <div class="tank-row">
+            <div class="tank-name">ST6</div>
+            <label class="field compact">
+              <span>Level</span>
+              <div class="suffix-input">
+                <input id="st6-level" data-save type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="0.0" />
+                <span>%</span>
+              </div>
+            </label>
+            <label class="check-field">
+              <input id="st6-active" data-save type="checkbox" />
+              <span>Active</span>
+            </label>
+          </div>
+
+          <div class="tank-row">
+            <div class="tank-name">ST7</div>
+            <label class="field compact">
+              <span>Level</span>
+              <div class="suffix-input">
+                <input id="st7-level" data-save type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="0.0" />
+                <span>%</span>
+              </div>
+            </label>
+            <label class="check-field">
+              <input id="st7-active" data-save type="checkbox" />
+              <span>Active</span>
+            </label>
+          </div>
+
+          <div class="tank-row">
+            <div class="tank-name">ST8</div>
+            <label class="field compact">
+              <span>Level</span>
+              <div class="suffix-input">
+                <input id="st8-level" data-save type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="0.0" />
+                <span>%</span>
+              </div>
+            </label>
+            <label class="check-field">
+              <input id="st8-active" data-save type="checkbox" />
+              <span>Active</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Inventory</p>
+            <h2>Waste tank</h2>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>WT level</span>
+          <div class="suffix-input">
+            <input id="wt-level" data-save type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="0.0" />
+            <span>%</span>
+          </div>
+        </label>
+      </section>
+
+      <button id="generate-btn" class="btn btn-primary btn-large" type="button">
+        Generate output
+      </button>
+
+      <p class="privacy-note">Values are stored only in this browser on this device.</p>
+    </section>
+
+    <section id="output-screen" class="screen" aria-labelledby="output-title">
+      <header class="topbar output-topbar">
+        <button id="back-btn" class="btn btn-ghost" type="button">← Back</button>
+        <div class="output-heading">
+          <p class="eyebrow">Generated</p>
+          <h1 id="output-title">Report text</h1>
+        </div>
+      </header>
+
+      <div class="output-card">
+        <pre id="report-output"></pre>
+      </div>
+
+      <button id="copy-btn" class="btn btn-primary btn-large" type="button">Copy text</button>
+      <p id="copy-status" class="copy-status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
