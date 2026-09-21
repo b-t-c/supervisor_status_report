@@ -167,6 +167,37 @@ select.invalid {
   border-top: 1px solid #e2e8f0;
 }
 
+.sample-block-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sample-block-heading h3 {
+  margin-bottom: 0;
+}
+
+.not-collected-field {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.not-collected-field input {
+  width: 19px;
+  min-height: 19px;
+  height: 19px;
+  margin: 0;
+  padding: 0;
+  accent-color: #0f172a;
+}
+
 .paired-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;

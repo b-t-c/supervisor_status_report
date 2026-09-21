@@ -45,6 +45,10 @@
       }
     }
 
+    for (const prefix of ["p3", "p4"]) {
+      $(`${prefix}-b-not-collected`).checked = false;
+    }
+
     updateConditionalFields();
     updateRuntimePreview();
   }
@@ -74,6 +78,10 @@
       field.classList.remove("invalid");
     }
 
+    for (const prefix of ["p3", "p4"]) {
+      $(`${prefix}-b-not-collected`).checked = false;
+    }
+
     updateConditionalFields();
     updateRuntimePreview();
     $("validation-summary").hidden = true;
@@ -88,6 +96,7 @@
 
       samples.hidden = noSamplesRequired;
       $(`${prefix}-b-sample`).hidden = mode !== "serial";
+      $(`${prefix}-b-fields`).hidden = isBNotCollected(prefix);
       $(`${prefix}-a-heading`).textContent = standby ? "Standby sample" : "A-side sample";
 
       const note = $(`${prefix}-mode-note`);
@@ -114,14 +123,31 @@
     if (mode !== "standby" && mode !== "serial") return false;
 
     const a = numericSampleValue(`${prefix}-a-result`);
-    if (a !== null && a > 100) return true;
+    if (a !== null && a >= 100) return true;
 
-    if (mode === "serial") {
+    if (mode === "serial" && !isBNotCollected(prefix)) {
       const b = numericSampleValue(`${prefix}-b-result`);
-      if (b !== null && b > 100) return true;
+      if (b !== null && b >= 100) return true;
     }
 
     return false;
+  }
+
+  function isBNotCollected(prefix) {
+    return $(`${prefix}-b-not-collected`).checked;
+  }
+
+  function handleBNotCollectedChange(prefix) {
+    if (isBNotCollected(prefix)) {
+      for (const suffix of ["b-result", "b-time"]) {
+        const field = $(`${prefix}-${suffix}`);
+        field.value = "";
+        field.classList.remove("invalid");
+      }
+      saveState();
+    }
+
+    updateConditionalFields();
   }
 
   function parseLevel(id) {
@@ -179,6 +205,8 @@
 
     if (mode === "standby") {
       sentence = `${label} ${modeText}. Standby sample, ${Math.round(a)}ppm @ ${aTime}.`;
+    } else if (isBNotCollected(prefix)) {
+      sentence = `${label} ${modeText}. A-side, ${Math.round(a)}ppm @ ${aTime}. B-side not collected yet.`;
     } else {
       const b = Number($(`${prefix}-b-result`).value);
       const bTime = $(`${prefix}-b-time`).value;
@@ -218,12 +246,11 @@
       if (mode === "standby" || mode === "serial") {
         const requiredFields = mode === "standby"
           ? [["a-result", "standby sample result"], ["a-time", "standby sample time"]]
-          : [
-              ["a-result", "A-side result"],
-              ["a-time", "A-side time"],
-              ["b-result", "B-side result"],
-              ["b-time", "B-side time"]
-            ];
+          : [["a-result", "A-side result"], ["a-time", "A-side time"]];
+
+        if (mode === "serial" && !isBNotCollected(prefix)) {
+          requiredFields.push(["b-result", "B-side result"], ["b-time", "B-side time"]);
+        }
 
         for (const [fieldSuffix, fieldName] of requiredFields) {
           const field = $(`${prefix}-${fieldSuffix}`);
@@ -347,6 +374,12 @@
     });
   });
 
+  for (const prefix of ["p3", "p4"]) {
+    $(`${prefix}-b-not-collected`).addEventListener("change", () => {
+      handleBNotCollectedChange(prefix);
+    });
+  }
+
   $("clear-btn").addEventListener("click", () => {
     if (confirm("Clear all saved report values and restore defaults?")) {
       resetState();
@@ -358,6 +391,10 @@
     if (!validate()) return;
     $("report-output").textContent = buildReport();
     $("copy-status").textContent = "";
+    for (const prefix of ["p3", "p4"]) {
+      $(`${prefix}-b-not-collected`).checked = false;
+    }
+    updateConditionalFields();
     showScreen("output-screen");
   });
 
