@@ -1,6 +1,8 @@
-# Supervisor Status Report V2 — GitHub Pages package
+# Supervisor Status Report V2.1 — GitHub Pages package
 
 This is the GitHub Pages-ready version of the client-only Supervisor Status Report app.
+
+V2.1 ensures all mode-dependent fields collapse reliably across desktop, Android, and iPhone browsers.
 
 Start with **DEPLOY_TO_GITHUB_PAGES.md** for step-by-step publishing instructions.
 

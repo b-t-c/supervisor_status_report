@@ -1,4 +1,4 @@
-# Deploy Supervisor Status Report V2 to GitHub Pages
+# Deploy Supervisor Status Report V2.1 to GitHub Pages
 
 This folder is ready to publish as a plain static GitHub Pages site.
 
@@ -114,7 +114,7 @@ That means:
 - One supervisor does not see another supervisor's entries.
 - Clearing website data can erase retained values.
 - The app's **Clear** button resets the saved report values.
-- GitHub is serving the application code; this V2 does not send the entered report contents to GitHub.
+- GitHub is serving the application code; this V2.1 does not send the entered report contents to GitHub.
 
 ## Offline behavior
 
