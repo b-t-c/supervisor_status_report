@@ -37,14 +37,17 @@
           <span>Current operational mode</span>
           <select id="p3-mode" data-save>
             <option value="offline">Offline</option>
+            <option value="startup">Starting up</option>
             <option value="standby">In standby</option>
             <option value="serial">In serial</option>
           </select>
         </label>
 
+        <p id="p3-mode-note" class="mode-note"></p>
+
         <div id="p3-samples" class="sample-grid" hidden>
-          <div class="sample-block">
-            <h3>A-side water</h3>
+          <div id="p3-a-sample" class="sample-block">
+            <h3 id="p3-a-heading">A-side sample</h3>
             <div class="paired-fields">
               <label class="field">
                 <span>Result (ppm)</span>
@@ -57,8 +60,8 @@
             </div>
           </div>
 
-          <div class="sample-block">
-            <h3>B-side water</h3>
+          <div id="p3-b-sample" class="sample-block">
+            <h3>B-side sample</h3>
             <div class="paired-fields">
               <label class="field">
                 <span>Result (ppm)</span>
@@ -71,6 +74,18 @@
             </div>
           </div>
         </div>
+
+        <label id="p3-trend-field" class="field trend-field" hidden>
+          <span>Out-of-spec, water content for this system is…</span>
+          <select id="p3-trend" data-save>
+            <option value="">Select trend</option>
+            <option value="first">First sample</option>
+            <option value="increasing">Increasing</option>
+            <option value="decreasing">Decreasing</option>
+            <option value="stable">Stable</option>
+            <option value="unclear">Unclear</option>
+          </select>
+        </label>
       </section>
 
       <section class="card">
@@ -85,14 +100,17 @@
           <span>Current operational mode</span>
           <select id="p4-mode" data-save>
             <option value="offline">Offline</option>
+            <option value="startup">Starting up</option>
             <option value="standby">In standby</option>
             <option value="serial">In serial</option>
           </select>
         </label>
 
+        <p id="p4-mode-note" class="mode-note"></p>
+
         <div id="p4-samples" class="sample-grid" hidden>
-          <div class="sample-block">
-            <h3>A-side water</h3>
+          <div id="p4-a-sample" class="sample-block">
+            <h3 id="p4-a-heading">A-side sample</h3>
             <div class="paired-fields">
               <label class="field">
                 <span>Result (ppm)</span>
@@ -105,8 +123,8 @@
             </div>
           </div>
 
-          <div class="sample-block">
-            <h3>B-side water</h3>
+          <div id="p4-b-sample" class="sample-block">
+            <h3>B-side sample</h3>
             <div class="paired-fields">
               <label class="field">
                 <span>Result (ppm)</span>
@@ -119,6 +137,18 @@
             </div>
           </div>
         </div>
+
+        <label id="p4-trend-field" class="field trend-field" hidden>
+          <span>Out-of-spec, water content for this system is…</span>
+          <select id="p4-trend" data-save>
+            <option value="">Select trend</option>
+            <option value="first">First sample</option>
+            <option value="increasing">Increasing</option>
+            <option value="decreasing">Decreasing</option>
+            <option value="stable">Stable</option>
+            <option value="unclear">Unclear</option>
+          </select>
+        </label>
       </section>
 
       <section class="card">

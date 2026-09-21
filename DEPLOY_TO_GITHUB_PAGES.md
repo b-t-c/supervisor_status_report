@@ -1,4 +1,4 @@
-# Deploy Supervisor Status Report V1 to GitHub Pages
+# Deploy Supervisor Status Report V2 to GitHub Pages
 
 This folder is ready to publish as a plain static GitHub Pages site.
 
@@ -114,7 +114,7 @@ That means:
 - One supervisor does not see another supervisor's entries.
 - Clearing website data can erase retained values.
 - The app's **Clear** button resets the saved report values.
-- GitHub is serving the application code; this V1 does not send the entered report contents to GitHub.
+- GitHub is serving the application code; this V2 does not send the entered report contents to GitHub.
 
 ## Offline behavior
 
@@ -129,7 +129,8 @@ Before distributing broadly:
 1. Publish the site.
 2. Open it on one iPhone in Safari.
 3. Enter:
-   - 3P/4P status and sample values
+   - Each 3P/4P operational mode and its required sample values
+   - An out-of-spec sample above 100 ppm and the corresponding trend
    - ST5–ST8 levels and active states
    - WT level
 4. Confirm Current NMP Supply updates.

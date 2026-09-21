@@ -144,6 +144,20 @@ select.invalid {
   margin-top: 14px;
 }
 
+.mode-note {
+  margin: 9px 0 0;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.trend-field {
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
 .sample-block {
   padding-top: 14px;
   border-top: 1px solid #e2e8f0;
