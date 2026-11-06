@@ -1,8 +1,8 @@
-# Facilities Supervisor Status Report V3
+# Facilities Supervisor Status Report V3.1
 
 This is the GitHub Pages-ready, client-only Supervisor Status Report app.
 
-V3 keeps the existing SRP report and adds a separate CESS tab. Both reports retain their own prior values on the device.
+V3.1 keeps the existing SRP report and CESS tab while adding required event-time entry for applicable tanker statuses. Both reports retain their own prior values on the device.
 
 ## SRP report
 
@@ -20,6 +20,8 @@ V3 keeps the existing SRP report and adds a separate CESS tab. Both reports reta
 - Electrolyte supplier, single destination, and detailed status fields
 - Other tanker contents, multiple destinations, and detailed status fields
 - Required reason fields for delayed or interrupted work
+- Required time fields for arrivals, inbounding, sample handoffs/results, unload starts, interruptions, and timed unload delays/pauses
+- Status output that places each recorded time directly into the corresponding event description
 - Standardized output ordered as tank levels followed by on-site tankers
 
 ## Shared behavior

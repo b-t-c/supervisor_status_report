@@ -31,14 +31,14 @@
   };
 
   const electrolyteStatuses = [
-    ["arrived", "Arrived (no inbound/sample)"],
+    ["arrived", "Arrived (not inbounded or sampled)"],
     ["inbounded", "GSC inbounded (no sample)"],
     ["sample_collection", "Sample collection in progress"],
-    ["awaiting_quality_pickup", "Sample awaiting Quality pickup"],
-    ["with_quality", "Sample with Quality team"],
+    ["awaiting_quality_pickup", "Sample collected, awaiting Quality pickup"],
+    ["with_quality", "Quality retrieved sample, awaiting results"],
     ["qc_passed_waiting", "QC passed, waiting for system to allow unload"],
     ["unload_delayed", "Unload delayed"],
-    ["unloading", "Unload in progress"],
+    ["unloading", "Unload started"],
     ["unload_interrupted", "Unload interrupted"],
     ["empty_awaiting_pickup", "Empty, awaiting pickup"]
   ];
@@ -47,7 +47,7 @@
     ["arrived", "Arrived"],
     ["setup_delayed", "Setup delayed"],
     ["setup_in_progress", "Setup in progress"],
-    ["unloading", "Unloading"],
+    ["unloading", "Unload/transfer started"],
     ["unload_delayed_paused", "Unload delayed/paused"],
     ["empty_awaiting_pickup", "Empty, awaiting pickup"],
     ["empty_prepping_removal", "Empty, prepping for removal"]
@@ -300,6 +300,7 @@
       otherSupplier: "",
       destination: "",
       status: "arrived",
+      statusTime: "",
       reason: "",
       contents: "",
       destinations: []
@@ -315,6 +316,7 @@
       otherSupplier: String(raw?.otherSupplier || ""),
       destination: String(raw?.destination || ""),
       status: raw?.status || "arrived",
+      statusTime: String(raw?.statusTime || ""),
       reason: String(raw?.reason || ""),
       contents: String(raw?.contents || ""),
       destinations: Array.isArray(raw?.destinations) ? raw.destinations.filter(value => CESS_TANKS.includes(value)) : []
@@ -381,10 +383,33 @@
     return "";
   }
 
+  function tankerTimeLabel(tanker) {
+    if (tanker.type === "electrolyte") {
+      const labels = {
+        arrived: "Arrival time",
+        inbounded: "GSC inbound time",
+        awaiting_quality_pickup: "Sample collection time",
+        with_quality: "Quality pickup time",
+        qc_passed_waiting: "QC pass time",
+        unloading: "Unload start time",
+        unload_interrupted: "Interruption time"
+      };
+      return labels[tanker.status] || "";
+    }
+
+    const labels = {
+      arrived: "Arrival time",
+      unloading: "Unload/transfer start time",
+      unload_delayed_paused: "Delay/pause time"
+    };
+    return labels[tanker.status] || "";
+  }
+
   function renderTankers() {
     $("no-tankers-message").hidden = cessTankers.length > 0;
     $("tanker-list").innerHTML = cessTankers.map((tanker, index) => {
       const reasonLabel = tankerReasonLabel(tanker);
+      const timeLabel = tankerTimeLabel(tanker);
       const electrolyteFields = `
         <label class="field">
           <span>Supplier</span>
@@ -438,6 +463,10 @@
               <span>Status</span>
               <select data-tanker-field="status">${tankerStatusOptions(tanker)}</select>
             </label>
+            <label class="field conditional-field"${timeLabel ? "" : " hidden"}>
+              <span>${escapeHtml(timeLabel)}</span>
+              <input type="time" data-tanker-field="statusTime" value="${escapeHtml(tanker.statusTime)}" />
+            </label>
             <label class="field conditional-field"${reasonLabel ? "" : " hidden"}>
               <span>${escapeHtml(reasonLabel)}</span>
               <input type="text" data-tanker-field="reason" value="${escapeHtml(tanker.reason)}" placeholder="Enter reason" />
@@ -470,13 +499,21 @@
     } else if (name === "type") {
       tanker.type = field.value;
       tanker.status = "arrived";
+      tanker.statusTime = "";
       tanker.reason = "";
       tanker.destination = "";
       tanker.destinations = [];
       renderTankers();
+    } else if (name === "status") {
+      if (tanker.status !== field.value) {
+        tanker.status = field.value;
+        tanker.statusTime = "";
+        tanker.reason = "";
+      }
+      if (event.type === "change") renderTankers();
     } else {
       tanker[name] = field.value;
-      if (event.type === "change" && (name === "supplier" || name === "status")) renderTankers();
+      if (event.type === "change" && name === "supplier") renderTankers();
     }
 
     saveCessState();
@@ -529,6 +566,9 @@
       if (tankerReasonLabel(tanker) && !tanker.reason.trim()) {
         invalidateTankerField(tanker, "reason", `${label}: reason is required for the selected status.`, errors);
       }
+      if (tankerTimeLabel(tanker) && !tanker.statusTime) {
+        invalidateTankerField(tanker, "statusTime", `${label}: ${tankerTimeLabel(tanker).toLowerCase()} is required.`, errors);
+      }
     });
 
     return showValidationErrors(errors, "cess-panel");
@@ -544,6 +584,37 @@
     return statuses.find(([value]) => value === tanker.status)?.[1] || tanker.status;
   }
 
+  function tankerStatusText(tanker) {
+    const time = tanker.statusTime;
+
+    if (tanker.type === "electrolyte") {
+      switch (tanker.status) {
+        case "arrived": return `Arrived at ${time}, not inbounded or sampled`;
+        case "inbounded": return `GSC inbounded at ${time} (no sample)`;
+        case "sample_collection": return "Sample collection in progress";
+        case "awaiting_quality_pickup": return `Sample collected at ${time}, awaiting Quality pickup`;
+        case "with_quality": return `Quality retrieved sample at ${time}, awaiting results`;
+        case "qc_passed_waiting": return `QC passed at ${time}, waiting for system to allow unload`;
+        case "unload_delayed": return `Unload delayed: ${tanker.reason.trim()}`;
+        case "unloading": return `Unload started at ${time}`;
+        case "unload_interrupted": return `Unload interrupted at ${time}: ${tanker.reason.trim()}`;
+        case "empty_awaiting_pickup": return "Empty, awaiting pickup";
+        default: return statusLabel(tanker);
+      }
+    }
+
+    switch (tanker.status) {
+      case "arrived": return `Arrived at ${time}`;
+      case "setup_delayed": return `Setup delayed: ${tanker.reason.trim()}`;
+      case "setup_in_progress": return "Setup in progress";
+      case "unloading": return `Unload/transfer started at ${time}`;
+      case "unload_delayed_paused": return `Unload delayed/paused at ${time}: ${tanker.reason.trim()}`;
+      case "empty_awaiting_pickup": return "Empty, awaiting pickup";
+      case "empty_prepping_removal": return "Empty, prepping for removal";
+      default: return statusLabel(tanker);
+    }
+  }
+
   function buildCessReport() {
     const lines = ["CESS tank levels"];
     for (const tank of CESS_TANKS) lines.push(`${tank.toUpperCase()} – ${formatPercent(parseLevel(`cess-${tank}-level`))}`);
@@ -553,7 +624,7 @@
       lines.push("No on-site tankers.");
     } else {
       cessTankers.forEach((tanker, index) => {
-        const status = tankerReasonLabel(tanker) ? `${statusLabel(tanker)}: ${tanker.reason.trim()}` : statusLabel(tanker);
+        const status = tankerStatusText(tanker);
         if (tanker.type === "electrolyte") {
           lines.push(`Tanker ${index + 1} – Electrolyte – ${supplierLabel(tanker)} – destination ${tanker.destination.toUpperCase()} – ${status}`);
         } else {

@@ -1,4 +1,4 @@
-const CACHE_NAME = "supervisor-status-report-v3";
+const CACHE_NAME = "supervisor-status-report-v3-1";
 const APP_ASSETS = [
   "./",
   "./index.html",

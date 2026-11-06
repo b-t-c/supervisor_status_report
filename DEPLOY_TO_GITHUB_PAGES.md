@@ -1,4 +1,4 @@
-# Deploy Facilities Supervisor Status Report V3
+# Deploy Facilities Supervisor Status Report V3.1
 
 This folder is ready to replace the existing app in its GitHub Pages repository.
 
@@ -12,7 +12,7 @@ This folder is ready to replace the existing app in its GitHub Pages repository.
 ```powershell
 git status
 git add -A
-git commit -m "Add CESS status report"
+git commit -m "Add tanker status time entries"
 git push
 ```
 
@@ -27,7 +27,7 @@ After GitHub finishes deploying:
 3. Confirm the **SRP** and **CESS** tabs appear.
 4. If an installed Home Screen copy still shows the old version, fully close and reopen it. Removing and re-adding the Home Screen icon is the fallback.
 
-The service-worker cache name changed in V3 so installed devices can retrieve the combined app.
+The service-worker cache name changed in V3.1 so installed devices can retrieve the tanker-time update.
 
 ## Data behavior
 
