@@ -1,25 +1,33 @@
-# Supervisor Status Report V2.2 — GitHub Pages package
+# Facilities Supervisor Status Report V3
 
-This is the GitHub Pages-ready version of the client-only Supervisor Status Report app.
+This is the GitHub Pages-ready, client-only Supervisor Status Report app.
 
-V2.2 treats samples at or above 100 ppm as out of spec and supports a temporary "B-side not collected yet" state immediately after switching into serial operation.
+V3 keeps the existing SRP report and adds a separate CESS tab. Both reports retain their own prior values on the device.
 
-Start with **DEPLOY_TO_GITHUB_PAGES.md** for step-by-step publishing instructions.
-
-## Application behavior
+## SRP report
 
 - 3P and 4P status inputs with Offline, Starting up, In standby, and In serial modes
 - Mode-specific sample fields and guidance
-- One standby sample or separate A-side/B-side serial samples
-- Out-of-spec trend selection when a relevant sample is at or above 100 ppm
-- Optional B-side "Not collected yet" state for newly started serial operation
+- Out-of-spec trend selection at or above 100 ppm
+- Optional B-side "Not collected yet" state
 - ST5–ST8 levels and active/inactive states
-- Current NMP Supply calculation across active tanks
-- WT level
-- Standardized generated report
-- Copy Text button
-- Local retention of previous values
-- Clear/reset button
-- PWA/offline support when hosted over HTTPS
+- Current NMP supply calculation and WT level
 
-No database or server-side report storage is used.
+## CESS report
+
+- ST1A, ST1B, ST2A, ST2B, ST3A, and ST3B levels
+- Any number of automatically numbered on-site tanker entries
+- Electrolyte supplier, single destination, and detailed status fields
+- Other tanker contents, multiple destinations, and detailed status fields
+- Required reason fields for delayed or interrupted work
+- Standardized output ordered as tank levels followed by on-site tankers
+
+## Shared behavior
+
+- Dynamic fields based on the selected mode, tanker type, supplier, and status
+- Copyable standardized report text
+- Independent local retention and clearing for each tab
+- PWA/offline support over HTTPS
+- No database or server-side report storage
+
+See **DEPLOY_TO_GITHUB_PAGES.md** for publishing and update instructions.

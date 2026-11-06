@@ -1,140 +1,36 @@
-# Deploy Supervisor Status Report V2.2 to GitHub Pages
+# Deploy Facilities Supervisor Status Report V3
 
-This folder is ready to publish as a plain static GitHub Pages site.
+This folder is ready to replace the existing app in its GitHub Pages repository.
 
-## What will be hosted
+## Update the existing repository
 
-Only the application files:
+1. Extract the contents of this package into the existing repository folder.
+2. Allow the new files to overwrite the old versions.
+3. Confirm `index.html` remains at the repository root.
+4. Open PowerShell in that repository folder and run:
 
-- `index.html`
-- `styles.css`
-- `app.js`
-- `manifest.json`
-- `service-worker.js`
-- the two app icons
-
-The report does **not** use a database or backend. Values entered by a supervisor are stored in that device/browser's local storage and the report is generated locally in the browser.
-
-## Easiest deployment method
-
-### 1. Create a repository
-
-On GitHub:
-
-1. Click **New repository**.
-2. Give it a simple name, for example:
-   `supervisor-status-report`
-3. Choose the repository visibility permitted by your company.
-4. Create the repository.
-
-> Important: GitHub Pages websites are web-accessible. Do not put sensitive company data, example reports, credentials, or secrets in this repository.
-
-### 2. Upload these files
-
-Upload the **contents of this folder** to the top level of the repository.
-
-The repository root should look exactly like:
-
-```text
-supervisor-status-report/
-├── .nojekyll
-├── index.html
-├── app.js
-├── styles.css
-├── manifest.json
-├── service-worker.js
-└── icons/
-    ├── icon-192.png
-    └── icon-512.png
+```powershell
+git status
+git add -A
+git commit -m "Add CESS status report"
+git push
 ```
 
-`index.html` must be at the repository root for the setup below.
+GitHub Pages will redeploy automatically from `main` if the repository is already configured.
 
-### 3. Turn on GitHub Pages
+## First phone test
 
-In the repository:
+After GitHub finishes deploying:
 
-1. Open **Settings**.
-2. In the left sidebar, open **Pages**.
-3. Under **Build and deployment**, set **Source** to:
-   **Deploy from a branch**
-4. Select:
-   - Branch: `main`
-   - Folder: `/(root)`
-5. Click **Save**.
+1. Open the existing app URL while online.
+2. Refresh once in Safari or Chrome.
+3. Confirm the **SRP** and **CESS** tabs appear.
+4. If an installed Home Screen copy still shows the old version, fully close and reopen it. Removing and re-adding the Home Screen icon is the fallback.
 
-GitHub will publish the site.
+The service-worker cache name changed in V3 so installed devices can retrieve the combined app.
 
-### 4. Open the app
+## Data behavior
 
-Return to **Settings → Pages**.
+The app has no database or backend. Entered values are stored only in that device/browser's local storage. SRP and CESS retain separate values, and **Clear** affects only the currently selected tab.
 
-Once deployment finishes, GitHub will show a **Visit site** link.
-
-For a normal GitHub.com project site, the address will generally have this form:
-
-```text
-https://YOUR-USERNAME.github.io/supervisor-status-report/
-```
-
-Send that HTTPS address to the supervisors.
-
-## iPhone
-
-1. Open the GitHub Pages URL in **Safari**.
-2. Confirm the inputs, live Current NMP Supply field, Generate Output button, and Copy Text button work.
-3. To put it on the Home Screen:
-   - Tap **Share**
-   - Tap **Add to Home Screen**
-   - Confirm **Add**
-
-The app includes a web-app manifest and is configured to launch in a standalone/app-like display.
-
-## Android
-
-Open the same URL in Chrome. The browser may offer **Install app** or **Add to Home screen**.
-
-The standalone `.html` file can still be used directly on Android if desired, but the hosted URL gives Android and iPhone one consistent distribution method.
-
-## Updating the app later
-
-Replace/edit the files in the repository and commit the change to `main`.
-
-GitHub Pages republishes from the configured source. Supervisors continue using the same URL.
-
-The service worker uses a network-first strategy, so when a device has a network connection it will retrieve updated files and refresh its cached copy.
-
-## Local data behavior
-
-The app stores prior entries using browser `localStorage`.
-
-That means:
-
-- Values remain on the supervisor's device/browser.
-- One supervisor does not see another supervisor's entries.
-- Clearing website data can erase retained values.
-- The app's **Clear** button resets the saved report values.
-- GitHub is serving the application code; this V2.2 does not send the entered report contents to GitHub.
-
-## Offline behavior
-
-After the GitHub Pages version has been opened successfully, the service worker caches the app files. It is designed to remain usable when the device temporarily has no network connection.
-
-For initial installation/loading and for receiving updates, the phone should have internet access.
-
-## Recommended first test
-
-Before distributing broadly:
-
-1. Publish the site.
-2. Open it on one iPhone in Safari.
-3. Enter:
-   - Each 3P/4P operational mode and its required sample values
-   - An out-of-spec sample at or above 100 ppm and the corresponding trend
-   - Serial mode with **Not collected yet** selected for B-side
-   - ST5–ST8 levels and active states
-   - WT level
-4. Confirm Current NMP Supply updates.
-5. Generate the report.
-6. Copy the report text and paste it into Notes or your normal reporting destination.
-7. Add the app to the iPhone Home Screen and repeat the test from the Home Screen icon.
+GitHub Pages serves only the application files. Do not add completed plant reports, credentials, or sensitive example data to the repository.
